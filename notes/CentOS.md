@@ -8,7 +8,24 @@ Linux 从入门到放弃系列之 CentOS
 
 首先需要下载 VirtualBox 和 CentOS 镜像，最好在虚拟机的设置页面将网络设置为“桥接网卡”（如果希望本机和虚拟机能够相互访问，虚拟机又可能访问外部网络的话），如果只需要命令行（盲猜下载的 CentOS 镜像是完整版），装系统的时候需要在 INSTALLATION SUMMARY 页面点击 Software Selection 将 Base Environment 修改为 Minimal Install，省略具体安装步骤。
 
-#### 常用命令
+### yum 切换阿里源
+
+如果出现 yum 下载软件速度很慢的问题，可以将 yum 的镜像源切换成阿里源
+
+```shell
+# 备份 CentOS-Base.repo
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+
+# 使用 wget 下载（二选一）
+wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-8.repo
+# 使用 curl 下载（二选一）
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-8.repo
+
+# 生成缓存
+yum makecache
+```
+
+### 常用命令
 
 ```shell
 # 关机
@@ -27,7 +44,7 @@ cat /etc/redhat-release
 uname -a
 ```
 
-#### 服务相关命令
+### 服务相关命令
 
 ```shell
 # 开启服务
@@ -46,7 +63,7 @@ systemctl enable xxx.service
 systemctl disable xxx.service
 ```
 
-#### 关闭 SElinux
+### 关闭 SElinux
 
 ```shell
 # 用文本编辑器打开 /etc/sysconfig/selinux 文件
@@ -58,7 +75,7 @@ vim /etc/sysconfig/selinux
 sestatus
 ```
 
-#### 防火墙 firewall 相关命令
+### 防火墙 firewall 相关命令
 ```shell
 # 永久开放
 firewall-cmd --zone=public --add-port=80/tcp --permanent
@@ -82,7 +99,7 @@ systemctl stop firewalld.service
 firewall-cmd --state
 ```
 
-#### 设置静态 IP
+### 设置静态 IP
 
 ```shell
 # 用文本编辑器打开 /etc/sysconfig/network-scripts/ 目录下的网卡配置文件，如果只设置了一个网卡，理论上只有一个文件，形如 ifcfg-enp0s3
